@@ -83,13 +83,6 @@ echo "  🔑 Mistral:    ${MISTRAL_KEY:0:8}..."
 echo "  🔑 GitHub:     ${GITHUB_KEY:0:8}..."
 echo "  🔗 Guild ID:   $GUILD_ID"
 echo ""
-read -p "  Stämmer allt? (j/n): " CONFIRM < /dev/tty
-if [ "$CONFIRM" != "j" ] && [ "$CONFIRM" != "J" ] && [ "$CONFIRM" != "ja" ]; then
-    echo "❌ Avbruten. Kör scriptet igen!"
-    exit 1
-fi
-
-echo ""
 echo "⏳ Fixar konfiguration..."
 
 # ═══ 1. Skriv korrekt .env ═══
