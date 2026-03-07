@@ -32,41 +32,41 @@ echo "  Klistra in varje nyckel när du blir tillfrågad"
 echo "───────────────────────────────────────────────────"
 echo ""
 
-read -p "🔑 Ollama API Key (börjar med d9... eller liknande): " OLLAMA_KEY
+read -p "🔑 Ollama API Key: " OLLAMA_KEY < /dev/tty
 while [ -z "$OLLAMA_KEY" ]; do
-    read -p "   Du måste ange Ollama-nyckeln: " OLLAMA_KEY
+    read -p "   Du måste ange Ollama-nyckeln: " OLLAMA_KEY < /dev/tty
 done
 
-read -p "🔑 Groq API Key (börjar med gsk_): " GROQ_KEY
+read -p "🔑 Groq API Key (börjar med gsk_): " GROQ_KEY < /dev/tty
 while [ -z "$GROQ_KEY" ]; do
-    read -p "   Du måste ange Groq-nyckeln: " GROQ_KEY
+    read -p "   Du måste ange Groq-nyckeln: " GROQ_KEY < /dev/tty
 done
 
-read -p "🔑 Google AI API Key (börjar med AIza): " GOOGLE_KEY
+read -p "🔑 Google AI API Key (börjar med AIza): " GOOGLE_KEY < /dev/tty
 while [ -z "$GOOGLE_KEY" ]; do
-    read -p "   Du måste ange Google-nyckeln: " GOOGLE_KEY
+    read -p "   Du måste ange Google-nyckeln: " GOOGLE_KEY < /dev/tty
 done
 
-read -p "🔑 OpenRouter API Key (börjar med sk-or-v1-): " OPENROUTER_KEY
+read -p "🔑 OpenRouter API Key (börjar med sk-or-v1-): " OPENROUTER_KEY < /dev/tty
 while [ -z "$OPENROUTER_KEY" ]; do
-    read -p "   Du måste ange OpenRouter-nyckeln: " OPENROUTER_KEY
+    read -p "   Du måste ange OpenRouter-nyckeln: " OPENROUTER_KEY < /dev/tty
 done
 
-read -p "🔑 Mistral API Key: " MISTRAL_KEY
+read -p "🔑 Mistral API Key: " MISTRAL_KEY < /dev/tty
 while [ -z "$MISTRAL_KEY" ]; do
-    read -p "   Du måste ange Mistral-nyckeln: " MISTRAL_KEY
+    read -p "   Du måste ange Mistral-nyckeln: " MISTRAL_KEY < /dev/tty
 done
 
-read -p "🔑 GitHub Token (börjar med ghp_): " GITHUB_KEY
+read -p "🔑 GitHub Token (börjar med ghp_): " GITHUB_KEY < /dev/tty
 while [ -z "$GITHUB_KEY" ]; do
-    read -p "   Du måste ange GitHub-token: " GITHUB_KEY
+    read -p "   Du måste ange GitHub-token: " GITHUB_KEY < /dev/tty
 done
 
 # ═══ Guild ID ═══
 echo ""
-read -p "🔗 Discord Guild ID (server-ID): " GUILD_ID
+read -p "🔗 Discord Guild ID (server-ID): " GUILD_ID < /dev/tty
 while [ -z "$GUILD_ID" ]; do
-    read -p "   Du måste ange Guild ID: " GUILD_ID
+    read -p "   Du måste ange Guild ID: " GUILD_ID < /dev/tty
 done
 
 # ═══ Sammanfattning ═══
@@ -83,7 +83,7 @@ echo "  🔑 Mistral:    ${MISTRAL_KEY:0:8}..."
 echo "  🔑 GitHub:     ${GITHUB_KEY:0:8}..."
 echo "  🔗 Guild ID:   $GUILD_ID"
 echo ""
-read -p "  Stämmer allt? (j/n): " CONFIRM
+read -p "  Stämmer allt? (j/n): " CONFIRM < /dev/tty
 if [ "$CONFIRM" != "j" ] && [ "$CONFIRM" != "J" ] && [ "$CONFIRM" != "ja" ]; then
     echo "❌ Avbruten. Kör scriptet igen!"
     exit 1
