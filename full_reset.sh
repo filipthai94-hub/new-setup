@@ -1,21 +1,30 @@
 #!/bin/bash
 # ═══════════════════════════════════════════════════════════════
-# 🍔 OpenClaw — FULL RESET för Alex (Yens assistent)
-# Workspace + Config + Skills — allt i ett
+# 🍔 Alex — Komplett Setup (baserat på MiniMilo)
+# REN SLATE — skriver över config + workspace helt
 # ═══════════════════════════════════════════════════════════════
 set -e
 
 W="$HOME/.openclaw/workspace"
 CONFIG="$HOME/.openclaw/openclaw.json"
+ENV_FILE="$HOME/.openclaw/.env"
 
 echo "═══════════════════════════════════════════════════"
-echo "  🍔 Full Reset — Alex Setup"
+echo "  🍔 Alex — Komplett Setup"
 echo "═══════════════════════════════════════════════════"
+echo ""
 
-# ═══ Skapa mappar ═══
+# ═══ Kontroller ═══
+if [ ! -f "$CONFIG" ]; then echo "❌ openclaw.json saknas"; exit 1; fi
+if [ ! -f "$ENV_FILE" ]; then echo "❌ .env saknas"; exit 1; fi
+echo "✅ Config och .env hittade"
+
+# ═══════════════════════════════════════════════════════
+# DEL 1: WORKSPACE-FILER
+# ═══════════════════════════════════════════════════════
+echo "⏳ Skapar workspace-filer..."
 mkdir -p "$W/memory/archive" "$W/projects" "$W/scripts" "$W/.learnings"
 
-# ═══ IDENTITY.md ═══
 cat > "$W/IDENTITY.md" << 'EOF'
 # IDENTITY.md
 
@@ -25,7 +34,6 @@ cat > "$W/IDENTITY.md" << 'EOF'
 - **Emoji:** 🍔
 EOF
 
-# ═══ SOUL.md ═══
 cat > "$W/SOUL.md" << 'EOF'
 # SOUL.md — Alex Core Identity
 
@@ -58,7 +66,6 @@ cat > "$W/SOUL.md" << 'EOF'
 - **Prata ALLTID svenska** — aldrig engelska om Yen inte ber om det
 EOF
 
-# ═══ USER.md ═══
 cat > "$W/USER.md" << 'EOF'
 # USER.md — Om Yen
 
@@ -88,7 +95,6 @@ cat > "$W/USER.md" << 'EOF'
 - Bror: Filip (Filippe) — driver Telestore
 EOF
 
-# ═══ AGENTS.md ═══
 cat > "$W/AGENTS.md" << 'EOF'
 # AGENTS.md — Arbetsflöden & Regler
 
@@ -126,7 +132,6 @@ cat > "$W/AGENTS.md" << 'EOF'
 - [ ] Tillämpat rätt nivå (1/2/3)?
 EOF
 
-# ═══ BOOTSTRAP.md ═══
 cat > "$W/BOOTSTRAP.md" << 'EOF'
 # BOOTSTRAP.md — Session Startup
 
@@ -143,7 +148,6 @@ Posta en kort hälsning i Discord. Max 1-2 meningar. Alltid på svenska.
 - SOUL, USER, AGENTS, TOOLS, IDENTITY, MEMORY är redan injectade — läs dem INTE igen
 EOF
 
-# ═══ TOOLS.md ═══
 cat > "$W/TOOLS.md" << 'EOF'
 # TOOLS.md — Verktyg & Integrationer
 
@@ -169,7 +173,6 @@ cat > "$W/TOOLS.md" << 'EOF'
 - Förklara varje steg enkelt
 EOF
 
-# ═══ MEMORY.md ═══
 cat > "$W/MEMORY.md" << 'EOF'
 # MEMORY.md — Project Map & System State
 
@@ -180,20 +183,20 @@ cat > "$W/MEMORY.md" << 'EOF'
 ## 🗺️ Filstruktur
 ```
 ~/.openclaw/
-├── openclaw.json          # Systemkonfig
-├── .env                   # API-nycklar
+├── openclaw.json
+├── .env
 └── workspace/
-    ├── IDENTITY.md        # Namn, emoji
-    ├── SOUL.md            # Personlighet & regler
-    ├── AGENTS.md          # Arbetsflöden
-    ├── USER.md            # Om Yen
+    ├── IDENTITY.md
+    ├── SOUL.md
+    ├── AGENTS.md
+    ├── USER.md
     ├── MEMORY.md          # ← Du är här
-    ├── TOOLS.md           # Verktyg
-    ├── HEARTBEAT.md       # Scheman
-    ├── BOOTSTRAP.md       # Startup
-    ├── memory/            # Dagliga loggar
-    │   └── archive/       # Arkiverade loggar
-    └── projects/          # Projektfiler
+    ├── TOOLS.md
+    ├── HEARTBEAT.md
+    ├── BOOTSTRAP.md
+    ├── memory/
+    │   └── archive/
+    └── projects/
 ```
 
 ## 🛠️ Infrastruktur
@@ -205,7 +208,6 @@ cat > "$W/MEMORY.md" << 'EOF'
 - Uppdatera denna fil efter varje milstolpe
 EOF
 
-# ═══ HEARTBEAT.md ═══
 cat > "$W/HEARTBEAT.md" << 'EOF'
 # HEARTBEAT.md — Schemalagda uppgifter
 
@@ -217,7 +219,6 @@ Arkivera dagsfiler äldre än 7 dagar till `memory/archive/`
 - **Dagsfil:** Logga händelser i `memory/YYYY-MM-DD.md`
 EOF
 
-# ═══ TODO.md ═══
 cat > "$W/TODO.md" << 'EOF'
 # TODO.md
 
@@ -229,159 +230,200 @@ cat > "$W/TODO.md" << 'EOF'
 - [ ] Identifiera verktyg för automatisering
 EOF
 
-# ═══ .learnings ═══
-cat > "$W/.learnings/LEARNINGS.md" << 'EOF'
-# Learnings
-*Lärdomar och korrigeringar*
-EOF
+mkdir -p "$W/.learnings"
+echo '# Learnings' > "$W/.learnings/LEARNINGS.md"
+echo '# Errors' > "$W/.learnings/ERRORS.md"
+echo '# Feature Requests' > "$W/.learnings/FEATURE_REQUESTS.md"
 
-cat > "$W/.learnings/ERRORS.md" << 'EOF'
-# Errors
-*Fel som inträffat och hur de löstes*
-EOF
-
-cat > "$W/.learnings/FEATURE_REQUESTS.md" << 'EOF'
-# Feature Requests
-*Funktioner som efterfrågats*
-EOF
-
-# ═══ Dagens memory-fil ═══
 TODAY=$(date +%Y-%m-%d)
 cat > "$W/memory/$TODAY.md" << EOF
 # $TODAY
 
 ## Session — Setup
-✅ Gjort: Full reset av Alex klar
-📁 Ändrat: Alla workspace-filer personaliserade för Yen
-🔑 Användare: Yen
+✅ Gjort: Komplett setup av Alex (Milo-standard)
+📁 Ändrat: Alla workspace-filer + config
 🍔 Assistent: Alex
+🔑 Användare: Yen
 EOF
 
-echo "✅ Workspace-filer klara"
+echo "✅ Workspace klart"
 
-# ═══ Fixa openclaw.json ═══
-echo "⏳ Fixar config..."
+# ═══════════════════════════════════════════════════════
+# DEL 2: OPENCLAW.JSON (ren slate baserad på Milo)
+# ═══════════════════════════════════════════════════════
+echo "⏳ Bygger config..."
 
 python3 << 'PYEOF'
 import json, os
 
-path = os.path.expanduser('~/.openclaw/openclaw.json')
+config_path = os.path.expanduser('~/.openclaw/openclaw.json')
 env_path = os.path.expanduser('~/.openclaw/.env')
 
+# Läs API-nycklar från .env
 env = {}
-if os.path.exists(env_path):
-    with open(env_path) as f:
-        for line in f:
-            line = line.strip()
-            if '=' in line and not line.startswith('#'):
-                k, v = line.split('=', 1)
-                env[k] = v
+with open(env_path) as f:
+    for line in f:
+        line = line.strip()
+        if '=' in line and not line.startswith('#'):
+            k, v = line.split('=', 1)
+            env[k] = v
 
-with open(path) as f:
-    cfg = json.load(f)
+# Läs befintlig config för att bevara tokens
+with open(config_path) as f:
+    old = json.load(f)
 
-# === PROVIDERS ===
-cfg.setdefault('models', {})['providers'] = {
-    "ollama": {
-        "baseUrl": "http://127.0.0.1:11434/v1",
-        "apiKey": env.get('OLLAMA_API_KEY', ''),
-        "api": "ollama",
-        "models": [{
-            "id": "qwen3.5:397b-cloud",
-            "name": "Qwen 3.5 397B (Cloud)",
-            "reasoning": True,
-            "input": ["text", "image"],
-            "cost": {"input": 0, "output": 0, "cacheRead": 0, "cacheWrite": 0},
-            "contextWindow": 262144,
-            "maxTokens": 262144
-        }]
+# Hämta tokens som MÅSTE bevaras
+discord_token = old.get('channels', {}).get('discord', {}).get('token', '')
+if not discord_token:
+    discord_token = old.get('channels', {}).get('discord', {}).get('botToken', '')
+gateway_token = old.get('gateway', {}).get('auth', {}).get('token', '')
+
+# ═══ HELT NY CONFIG (Milo-standard) ═══
+cfg = {
+    "meta": {
+        "lastTouchedVersion": "2026.3.2"
     },
-    "groq": {
-        "baseUrl": "https://api.groq.com/openai/v1",
-        "apiKey": env.get('GROQ_API_KEY', ''),
-        "models": [{
-            "id": "llama-3.3-70b-versatile",
-            "name": "Llama 3.3 70B (Groq)",
-            "input": ["text"],
-            "cost": {"input": 0, "output": 0},
-            "contextWindow": 131072
-        }]
+    "models": {
+        "providers": {
+            "ollama": {
+                "baseUrl": "https://ollama.com/v1",
+                "apiKey": env.get('OLLAMA_API_KEY', ''),
+                "api": "ollama",
+                "models": [
+                    {
+                        "id": "qwen3.5:397b-cloud",
+                        "name": "Qwen 3.5 397B (Cloud)",
+                        "reasoning": True,
+                        "input": ["text", "image"],
+                        "cost": {"input": 0, "output": 0, "cacheRead": 0, "cacheWrite": 0},
+                        "contextWindow": 262144,
+                        "maxTokens": 262144
+                    }
+                ]
+            },
+            "groq": {
+                "baseUrl": "https://api.groq.com/openai/v1",
+                "apiKey": env.get('GROQ_API_KEY', ''),
+                "models": [
+                    {
+                        "id": "llama-3.3-70b-versatile",
+                        "name": "Llama 3.3 70B (Groq)",
+                        "input": ["text"],
+                        "cost": {"input": 0, "output": 0},
+                        "contextWindow": 131072
+                    }
+                ]
+            },
+            "google": {
+                "baseUrl": "https://generativelanguage.googleapis.com/v1beta",
+                "apiKey": env.get('GOOGLE_AI_API_KEY', ''),
+                "models": [
+                    {
+                        "id": "gemini-2.5-flash",
+                        "name": "Gemini 2.5 Flash",
+                        "input": ["text", "image"],
+                        "cost": {"input": 0, "output": 0},
+                        "contextWindow": 1048576
+                    }
+                ]
+            },
+            "openrouter": {
+                "baseUrl": "https://openrouter.ai/api/v1",
+                "apiKey": env.get('OPENROUTER_API_KEY', ''),
+                "models": [
+                    {
+                        "id": "openrouter/free",
+                        "name": "OpenRouter Auto (Free)",
+                        "input": ["text"],
+                        "cost": {"input": 0, "output": 0},
+                        "contextWindow": 200000
+                    }
+                ]
+            }
+        }
     },
-    "google": {
-        "baseUrl": "https://generativelanguage.googleapis.com/v1beta",
-        "apiKey": env.get('GOOGLE_AI_API_KEY', ''),
-        "models": [{
-            "id": "gemini-2.5-flash",
-            "name": "Gemini 2.5 Flash",
-            "input": ["text", "image"],
-            "cost": {"input": 0, "output": 0},
-            "contextWindow": 1048576
-        }]
+    "agents": {
+        "defaults": {
+            "model": {
+                "primary": "ollama/qwen3.5:397b-cloud",
+                "fallbacks": [
+                    "groq/llama-3.3-70b-versatile",
+                    "google/gemini-2.5-flash",
+                    "openrouter/openrouter/free"
+                ]
+            },
+            "models": {
+                "ollama/qwen3.5:397b-cloud": {},
+                "groq/llama-3.3-70b-versatile": {},
+                "google/gemini-2.5-flash": {},
+                "openrouter/openrouter/free": {}
+            }
+        }
     },
-    "openrouter": {
-        "baseUrl": "https://openrouter.ai/api/v1",
-        "apiKey": env.get('OPENROUTER_API_KEY', ''),
-        "models": [{
-            "id": "openrouter/free",
-            "name": "OpenRouter Auto (Free)",
-            "input": ["text"],
-            "cost": {"input": 0, "output": 0},
-            "contextWindow": 200000
-        }]
+    "tools": {
+        "exec": {
+            "ask": "off"
+        }
+    },
+    "commands": {
+        "native": "auto",
+        "nativeSkills": "auto",
+        "restart": True,
+        "ownerDisplay": "raw"
+    },
+    "channels": {
+        "discord": {
+            "enabled": True,
+            "token": discord_token,
+            "groupPolicy": "allowlist",
+            "dmPolicy": "allowlist",
+            "allowFrom": ["1200474378144600097"],
+            "guilds": {
+                "1479907621854122166": {
+                    "requireMention": False
+                }
+            },
+            "streaming": "partial"
+        }
+    },
+    "gateway": {
+        "mode": "local",
+        "auth": {
+            "mode": "token",
+            "token": gateway_token
+        }
+    },
+    "plugins": {
+        "allow": ["discord"],
+        "entries": {}
     }
 }
 
-# === MODELL ===
-defaults = cfg.setdefault('agents', {}).setdefault('defaults', {})
-defaults['model'] = {
-    "primary": "ollama/qwen3.5:397b-cloud",
-    "fallbacks": [
-        "groq/llama-3.3-70b-versatile",
-        "google/gemini-2.5-flash",
-        "openrouter/openrouter/free"
-    ]
-}
-defaults['models'] = {
-    "ollama/qwen3.5:397b-cloud": {},
-    "groq/llama-3.3-70b-versatile": {},
-    "google/gemini-2.5-flash": {},
-    "openrouter/openrouter/free": {}
-}
-
-# === EXEC ===
-cfg.setdefault('tools', {})['exec'] = {"ask": "off"}
-
-# === DISCORD ===
-dc = cfg.get('channels', {}).get('discord', {})
-dc['streaming'] = 'partial'
-dc.pop('respondWithoutMention', None)
-dc['allowFrom'] = ['1200474378144600097']
-
-# Ta bort ogiltiga nycklar
-cfg.pop('providers', None)
-cfg.pop('commands', None)
-
-cfg['channels']['discord'] = dc
-
-with open(path, 'w') as f:
+with open(config_path, 'w') as f:
     json.dump(cfg, f, indent=2, ensure_ascii=False)
 
-print("✅ Config fixad")
+# Verifiera
+print("✅ Config skriven (Milo-standard)")
+print(f"   Discord token: {'✅' if discord_token else '❌ SAKNAS'}")
+print(f"   Gateway token: {'✅' if gateway_token else '❌ SAKNAS'}")
+print(f"   Ollama key:    {'✅' if env.get('OLLAMA_API_KEY') else '❌ SAKNAS'}")
+print(f"   Groq key:      {'✅' if env.get('GROQ_API_KEY') else '❌ SAKNAS'}")
+print(f"   Google key:    {'✅' if env.get('GOOGLE_AI_API_KEY') else '❌ SAKNAS'}")
+print(f"   OpenRouter key:{'✅' if env.get('OPENROUTER_API_KEY') else '❌ SAKNAS'}")
+print(f"   Primary model: ollama/qwen3.5:397b-cloud")
+print(f"   Ollama URL:    https://ollama.com/v1")
+print(f"   Guild ID:      1479907621854122166")
+print(f"   User ID:       1200474378144600097")
 PYEOF
 
-# ═══ Installera self-improving-agent skill ═══
-echo "⏳ Installerar self-improving-agent skill..."
-if command -v npx &> /dev/null; then
-    npx clawhub install self-improving-agent 2>/dev/null && echo "✅ Self-improving-agent installerad" || echo "⚠️ Kunde inte installera skill (inte kritiskt)"
-else
-    echo "⚠️ npx saknas — skill installeras manuellt senare"
-fi
-
-# ═══ Validera ═══
-echo "⏳ Validerar config..."
+# ═══════════════════════════════════════════════════════
+# DEL 3: VALIDERA + STARTA OM
+# ═══════════════════════════════════════════════════════
+echo ""
+echo "⏳ Validerar..."
 openclaw config validate
 
-# ═══ Starta om ═══
+echo ""
 echo "⏳ Startar om gateway..."
 openclaw gateway restart
 
